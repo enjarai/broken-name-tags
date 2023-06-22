@@ -6,11 +6,12 @@
   "name": "Broken Name Tags",
   "description": "Adds Broken Name Tags into Minecraft",
   "authors": [
-    "bluefire_phoenix"
+    "bluefire_phoenix",
+    "enjarai"
   ],
   "contact": {
-    "sources": "https://github.com/bloofirephoenix/BrokenNameTags",
-    "issues": "https://github.com/bloofirephoenix/BrokenNameTags/issues"
+    "sources": "https://github.com/enjarai/broken-name-tags",
+    "issues": "https://github.com/enjarai/broken-name-tags/issues"
   },
 
   "license": "MIT",
@@ -27,12 +28,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
     "fabric": "*",
-    "minecraft": "~1.20",
-    "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "minecraft": "~1.20"
   }
 }
