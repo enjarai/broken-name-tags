@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin extends Entity {
         if (!this.isRemoved() && !this.dead) {
 
             // check if the entity has a custom name
-            if (hasCustomName() || (this instanceof Tameable && ((Tameable) this).getOwner() != null)) { // the order of this if statement matters
+            if (hasCustomName() || (this instanceof Tameable tameable && tameable.getOwner() != null)) { // the order of this if statement matters
                 ItemStack tag = new ItemStack(BrokenNameTags.BROKEN_NAMETAG, 1);
                 NbtCompound nbt = new NbtCompound();
 
@@ -42,11 +42,13 @@ public abstract class LivingEntityMixin extends Entity {
                     name = getCustomName();
                 }
 
-                if (source.getDeathMessage((LivingEntity) (Object) this) != null) {
-                    nbt.putString("deathMessage", source.getDeathMessage((LivingEntity) (Object) this).getString());
+                Text deathMessage = source.getDeathMessage((LivingEntity) (Object) this);
+                if (deathMessage != null) {
+                    nbt.putString("deathMessage", deathMessage.getString());
                 }
+
                 tag.setCustomName(name); // todo this is causing the crash
-                tag.getNbt().put("data",nbt);
+                tag.getOrCreateNbt().put("data", nbt);
                 dropStack(tag);
             }
         }
