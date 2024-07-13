@@ -1,14 +1,14 @@
 package bluefirephoenix.brokennametags.mixin;
 
+import bluefirephoenix.brokennametags.BrokenNameTagComponent;
 import bluefirephoenix.brokennametags.BrokenNameTags;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Tameable;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityMixin extends Entity {
 
     @Shadow protected boolean dead;
-    LivingEntity entity;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -34,7 +33,6 @@ public abstract class LivingEntityMixin extends Entity {
             // check if the entity has a custom name
             if (hasCustomName() || (this instanceof Tameable tameable && tameable.getOwner() != null)) { // the order of this if statement matters
                 ItemStack tag = new ItemStack(BrokenNameTags.BROKEN_NAMETAG, 1);
-                NbtCompound nbt = new NbtCompound();
 
                 Text name = getDefaultName();
 
@@ -44,11 +42,10 @@ public abstract class LivingEntityMixin extends Entity {
 
                 Text deathMessage = source.getDeathMessage((LivingEntity) (Object) this);
                 if (deathMessage != null) {
-                    nbt.putString("deathMessage", deathMessage.getString());
+                    tag.set(BrokenNameTags.BROKEN_NAMETAG_COMPONENT, new BrokenNameTagComponent(deathMessage.getString()));
                 }
 
-                tag.setCustomName(name); // todo this is causing the crash
-                tag.getOrCreateNbt().put("data", nbt);
+                tag.set(DataComponentTypes.CUSTOM_NAME, name); // todo this is causing the crash
                 dropStack(tag);
             }
         }

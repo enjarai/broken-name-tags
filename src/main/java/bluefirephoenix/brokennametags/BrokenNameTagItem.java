@@ -1,11 +1,9 @@
 package bluefirephoenix.brokennametags;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.*;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -16,10 +14,10 @@ public class BrokenNameTagItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (stack.getNbt() != null) {
-            String deathMessage = stack.getNbt().getCompound("data").getString("deathMessage");
-            tooltip.add(Text.of(Formatting.GRAY+deathMessage));
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        var component = stack.get(BrokenNameTags.BROKEN_NAMETAG_COMPONENT);
+        if (component != null) {
+            tooltip.add(Text.of(Formatting.GRAY+component.deathMessage()));
         }
     }
 }
